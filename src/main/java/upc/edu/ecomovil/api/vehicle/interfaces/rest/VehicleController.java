@@ -44,9 +44,15 @@ public class VehicleController {
         return ResponseEntity.ok(vehicle);
     }
 
-    @GetMapping
+    @GetMapping("/type")
     public ResponseEntity<List<Vehicle>> getVehiclesByType(@RequestParam String type) {
         List<Vehicle> vehicles = vehicleQueryService.getVehiclesByType(type);
+        return ResponseEntity.ok(vehicles);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Vehicle>> getAllVehicles() {
+        List<Vehicle> vehicles = vehicleQueryService.getAllVehicles();
         return ResponseEntity.ok(vehicles);
     }
 }
