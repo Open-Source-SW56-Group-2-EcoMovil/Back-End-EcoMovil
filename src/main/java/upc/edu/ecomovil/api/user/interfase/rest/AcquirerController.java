@@ -40,7 +40,7 @@ public class AcquirerController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping
-    public ResponseEntity<StudentResource> createProfile(@RequestBody CreateAcquirerResource resource) {
+    public ResponseEntity<AcquirerResource> createProfile(@RequestBody CreateAcquirerResource resource) {
         var createAcquirerCommand = CreateAcquirerCommandFromResourceAssembler.toCommandFromResource(resource);
         var acquirer = acquirerCommandService.handle(createAcquirerCommand);
         if (acquirer.isEmpty()) return ResponseEntity.badRequest().build();
@@ -52,7 +52,7 @@ public class AcquirerController {
     @GetMapping
     public ResponseEntity<List<AcquirerResource>> getAllProfiles() {
         var getAllProfilesQuery = new GetAllAcquirerQuery();
-        var acquirer = studentQueryService.handle(getAllProfilesQuery);
+        var acquirer = acquirerQueryService.handle(getAllProfilesQuery);
         var acquirerResources = acquirer.stream().map(AcquirerResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(acquirerResources);
     }

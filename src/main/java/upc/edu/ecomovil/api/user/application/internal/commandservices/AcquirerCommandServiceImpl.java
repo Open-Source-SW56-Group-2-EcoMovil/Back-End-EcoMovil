@@ -13,7 +13,7 @@ public class AcquirerCommandServiceImpl implements AcquirerCommandService {
     private final AcquirerRepository acquirerRepository;
 
     public AcquirerCommandServiceImpl(AcquirerRepository acquirerRepository) {
-        this.AcquirerRepository = acquirerRepository;
+        this.acquirerRepository = acquirerRepository;
     }
 
     @Override
