@@ -3,10 +3,10 @@ package upc.edu.ecomovil.api.vehicles.domain.model.valueobjects;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 
-@Getter
+
 @Embeddable
-public record Details(String type, String name, Integer year, Double sellingPrice, Integer rentalPrice) {
-    public Details() { this(null, null, null, null, null); }
+public record Details(String type, String name, Integer year) {
+    public Details() { this(null, null, null); }
 
     public Details {
         if (type == null || type.isBlank()) {
@@ -18,17 +18,20 @@ public record Details(String type, String name, Integer year, Double sellingPric
         if (year == null) {
             throw new IllegalArgumentException("Year cannot be null");
         }
-        if (sellingPrice == null) {
-            throw new IllegalArgumentException("Selling price cannot be null");
-        }
-        if (rentalPrice == null) {
-            throw new IllegalArgumentException("Rental price cannot be null");
-        }
     }
 
-    public String getDetails() {
-        return String.format("Type: %s, Name: %s, Year: %d, Selling Price: %.2f, Rental Price: %.2f", type, name, year, sellingPrice, rentalPrice);
+    public String getType() {
+        return type;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
 }
 
 //@Embeddable

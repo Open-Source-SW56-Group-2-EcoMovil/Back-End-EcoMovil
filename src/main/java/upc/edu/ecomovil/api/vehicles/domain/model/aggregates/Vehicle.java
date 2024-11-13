@@ -31,8 +31,8 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
 
 
-    public Vehicle(String type, String name, Integer year, Double sellingPrice, Integer rentalPrice, Integer review, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
-        this.details = new Details(type, name, year, sellingPrice, rentalPrice);
+    public Vehicle(String type, String name, Integer year, Double sellingPrice, Double rentalPrice, Integer review, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
+        this.details = new Details(type, name, year);
         this.review = new Review(review);
         this.isAvailable = isAvailable;
         this.ImageUrl = imageUrl;
@@ -41,7 +41,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     }
 
     public Vehicle(CreateVehicleCommand command){
-        this.details = new Details(command.type(), command.name(), command.year(), command.sellingPrice(), command.rentalPrice());
+        this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
         this.isAvailable = command.isAvailable();
         this.ImageUrl = command.imageUrl();
@@ -51,8 +51,8 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
     public Vehicle(){}
 
-    public void updateDetails(String type, String name, Integer year, Double sellingPrice, Integer rentalPrice){
-        this.details = new Details(type, name, year, sellingPrice, rentalPrice);
+    public void updateDetails(String type, String name, Integer year, Double sellingPrice, Double rentalPrice){
+        this.details = new Details(type, name, year);
     }
 
     public void updateReview(Integer review){
@@ -75,9 +75,18 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.lng = lng;
     }
 
-    public String getDetails(){
-        return details.getDetails();
+    public String getType(){
+        return details.getType();
     }
+
+    public String getName(){
+        return details.getName();
+    }
+
+    public Integer getYear(){
+        return details.getYear();
+    }
+
 
     public Integer getReview(){
         return review.getReview();
