@@ -35,10 +35,10 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
 
 
-    public Vehicle(String type, String name, Integer year, Integer review, Double prices, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
+    public Vehicle(String type, String name, Integer year, Integer review, Double pricerent, Double pricesell, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
         this.details = new Details(type, name, year);
         this.review = new Review(review);
-        this.prices = new Prices(prices);
+        this.prices = new Prices(pricerent, pricesell);
         this.isAvailable = isAvailable;
         this.ImageUrl = imageUrl;
         this.lat = lat;
@@ -48,7 +48,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     public Vehicle(CreateVehicleCommand command){
         this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
-        this.prices = new Prices(command.price());
+        this.prices = new Prices(command.pricerent(), command.pricesell());
         this.isAvailable = command.isAvailable();
         this.ImageUrl = command.imageUrl();
         this.lat = command.lat();
@@ -65,8 +65,8 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.review = new Review(review);
     }
 
-    public void updatePrices(Double prices){
-        this.prices = new Prices(prices);
+    public void updatePrices(Double pricerent, Double pricesell){
+        this.prices = new Prices(pricerent, pricesell);
     }
 
     public void updateIsAvailable(Boolean isAvailable){
@@ -102,8 +102,12 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         return review.getReview();
     }
 
-    public Double getPrice(){
-        return prices.getPrice();
+    public Double getPriceRent(){
+        return prices.getPriceRent();
+    }
+
+    public Double getPriceSell(){
+        return prices.getPriceSell();
     }
 
 
