@@ -6,6 +6,7 @@ import lombok.Getter;
 import upc.edu.ecomovil.api.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import upc.edu.ecomovil.api.vehicles.domain.model.commands.CreateVehicleCommand;
 import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Details;
+import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Prices;
 import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Review;
 
 @Entity
@@ -16,6 +17,9 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
     @Embedded
     private Review review;
+
+    @Embedded
+    private Prices prices;
 
     @Getter
     private Boolean isAvailable;
@@ -31,9 +35,10 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
 
 
-    public Vehicle(String type, String name, Integer year, Double sellingPrice, Double rentalPrice, Integer review, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
+    public Vehicle(String type, String name, Integer year, Integer review, Double prices, Boolean isAvailable, String imageUrl, Float lat, Float lng) {
         this.details = new Details(type, name, year);
         this.review = new Review(review);
+        this.prices = new Prices(prices);
         this.isAvailable = isAvailable;
         this.ImageUrl = imageUrl;
         this.lat = lat;
@@ -43,6 +48,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     public Vehicle(CreateVehicleCommand command){
         this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
+        this.prices = new Prices(command.price());
         this.isAvailable = command.isAvailable();
         this.ImageUrl = command.imageUrl();
         this.lat = command.lat();
@@ -51,12 +57,16 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
     public Vehicle(){}
 
-    public void updateDetails(String type, String name, Integer year, Double sellingPrice, Double rentalPrice){
+    public void updateDetails(String type, String name, Integer year){
         this.details = new Details(type, name, year);
     }
 
     public void updateReview(Integer review){
         this.review = new Review(review);
+    }
+
+    public void updatePrices(Double prices){
+        this.prices = new Prices(prices);
     }
 
     public void updateIsAvailable(Boolean isAvailable){
@@ -90,6 +100,10 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
     public Integer getReview(){
         return review.getReview();
+    }
+
+    public Double getPrice(){
+        return prices.getPrice();
     }
 
 
