@@ -51,7 +51,7 @@ public class VehicleController {
         return new ResponseEntity<>(vehicleResource, HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<VehicleResource>> getAllVehicles(){
         var getAllVehiclesQuery = new GetAllVehiclesQuery();
         var vehicles = vehicleQueryService.handle(getAllVehiclesQuery);
@@ -59,7 +59,7 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleResources);
     }
 
-    @GetMapping("/{vehicleId}")
+    @GetMapping("/id/{vehicleId}")
     public ResponseEntity<VehicleResource> getVehicleById(@PathVariable Long vehicleId){
         var getVehicleByIdQuery = new GetVehicleByIdQuery(vehicleId);
         var vehicle = vehicleQueryService.handle(getVehicleByIdQuery);
@@ -68,7 +68,7 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleResource);
     }
 
-    @GetMapping("/{type}")
+    @GetMapping("/type/{type}")
     public ResponseEntity<List<VehicleResource>> getAllVehiclesByType(@PathVariable String type){
         var getAllVehiclesByTypeQuery = new GetAllVehiclesByTypeQuery(type);
         var vehicles = vehicleQueryService.handle(getAllVehiclesByTypeQuery);
