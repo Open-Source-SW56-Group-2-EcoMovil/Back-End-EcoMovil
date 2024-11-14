@@ -88,6 +88,11 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>12.2.0.jre11</version> <!-- Versión actualizada para soportar JDK más reciente -->
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
