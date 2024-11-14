@@ -25,7 +25,7 @@ public class OpenApiConfiguration {
                             .description("UPC Ecomovil API Wiki Documentation")
                             .url("https://upc-ecomovil-api.wiki.github.io/docs"));
             // Add security scheme
-            /*final String securitySchemeName = "bearerAuth";
+            final String securitySchemeName = "bearerAuth";
 
         openApi.addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
@@ -35,7 +35,7 @@ public class OpenApiConfiguration {
                                         .name(securitySchemeName)
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT")));*/
+                                        .bearerFormat("JWT")));
 
             // Return OpenAPI configuration object with all the settings
 
