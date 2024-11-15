@@ -5,6 +5,6 @@ import upc.edu.ecomovil.api.user.interfase.rest.resources.student.StudentResourc
 
 public class StudentResourceFromEntityAssembler {
     public static StudentResource toResourceFromEntity(Student student){
-        return new StudentResource(student.getId(), student.getFullName(), student.getEmail(), student.getPhoneNumber(), student.getRuc());
+        return new StudentResource(student.getId(), student.getFullName(), student.getEmail(), student.getPhoneNumber(), student.getRuc(), student.getPlan().getId());
     }
 }

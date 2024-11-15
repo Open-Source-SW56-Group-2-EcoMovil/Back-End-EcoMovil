@@ -5,6 +5,6 @@ import upc.edu.ecomovil.api.user.interfase.rest.resources.student.CreateStudentR
 
 public class CreateStudentCommandFromResourceAssembler {
     public static CreateStudentCommand toCommandFromResource(CreateStudentResource resource){
-        return new CreateStudentCommand(resource.firstName(), resource.lastName(), resource.email(), resource.phoneNumber(), resource.ruc());
+        return new CreateStudentCommand(resource.firstName(), resource.lastName(), resource.email(), resource.phoneNumber(), resource.ruc(), resource.planId());
     }
 }

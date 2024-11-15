@@ -1,6 +1,7 @@
 package upc.edu.ecomovil.api.user.domain.model.entities;
 
 import jakarta.persistence.*;
+import upc.edu.ecomovil.api.plan2.domain.model.aggregates.Plan2;
 import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
 import upc.edu.ecomovil.api.user.domain.model.commands.CreateStudentCommand;
 import upc.edu.ecomovil.api.user.domain.model.valueobjects.RucNumber;
@@ -8,6 +9,10 @@ import upc.edu.ecomovil.api.user.domain.model.valueobjects.RucNumber;
 @Entity
 public class Student extends Profile {
     //falta relaciones con vehicles y plans
+
+    @ManyToOne
+    @JoinColumn(name = "plan_id")  // Relaciona con la tabla 'Plan'
+    private Plan2 plan;
 
     @Embedded
     private RucNumber ruc;
@@ -21,9 +26,10 @@ public class Student extends Profile {
         super();
     }
 
-    public Student(CreateStudentCommand command) {
+    public Student(CreateStudentCommand command, Plan2 plan) {
         super(command.firstName(), command.lastName(), command.email(), command.phoneNumber());
         this.ruc = new RucNumber(command.rucNumber());
+        this.plan = plan;
     }
 
     public void updateRuc(String ruc){
@@ -33,4 +39,8 @@ public class Student extends Profile {
     public String getRuc(){
         return ruc.getRucNumber();
     }
+    public Plan2 getPlan() {
+        return plan;
+    }
+
 }
