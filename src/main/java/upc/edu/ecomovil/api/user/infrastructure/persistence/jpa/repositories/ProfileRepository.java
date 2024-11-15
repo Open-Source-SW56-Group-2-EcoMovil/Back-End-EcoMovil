@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     //Aqui incluyo aquellos metodos que no estan en el JpaRepository
     Optional<Profile> findByEmail(EmailAddress emailAddress);
+
 }

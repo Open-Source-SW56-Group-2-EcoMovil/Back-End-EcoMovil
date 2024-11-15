@@ -2,6 +2,7 @@ package upc.edu.ecomovil.api.user.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
 import upc.edu.ecomovil.api.user.domain.model.entities.Student;
+import upc.edu.ecomovil.api.user.domain.model.queries.Student.GetAllStudentByPlanIdQuery;
 import upc.edu.ecomovil.api.user.domain.model.queries.Student.GetAllStudentQuery;
 import upc.edu.ecomovil.api.user.domain.services.StudentQueryService;
 import upc.edu.ecomovil.api.user.infrastructure.persistence.jpa.repositories.StudentRepository;
@@ -20,6 +21,11 @@ public class StudentQueryServiceImpl implements StudentQueryService {
     @Override
     public List<Student> handle(GetAllStudentQuery query) {
         return studentRepository.findAll();
+    }
+
+    @Override
+    public List<Student> handle(GetAllStudentByPlanIdQuery query) {
+        return studentRepository.findAllByPlanId(query.planId());
     }
 
     //@Override

@@ -56,4 +56,12 @@ public class StudentController {
         var studentResources = students.stream().map(StudentResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(studentResources);
     }
+
+    @GetMapping("/plan/{planId}")
+    public ResponseEntity<List<StudentResource>> getAllStudentsByPlanId(@PathVariable Long planId) {
+        var getAllProfilesQuery = new GetAllStudentQuery();
+        var students = studentQueryService.handle(getAllProfilesQuery);
+        var studentResources = students.stream().map(StudentResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(studentResources);
+    }
 }
