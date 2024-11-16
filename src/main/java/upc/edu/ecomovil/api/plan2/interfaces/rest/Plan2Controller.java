@@ -64,4 +64,14 @@ public class Plan2Controller {
         var plan2Resource = Plan2ResourceFromEntityAssembler.toResourceFromEntity(plan2.get());
         return ResponseEntity.ok(plan2Resource);
     }
+
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<Void> deletePlan2ById(@PathVariable Long id){
+        var getPlan2ByIdQuery = new GetPlan2ByIdQuery(id);
+        var plan2 = plan2QueryService.handle(getPlan2ByIdQuery);
+        if (plan2.isEmpty()) return ResponseEntity.notFound().build();
+        plan2CommandService.deletePlan2ById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

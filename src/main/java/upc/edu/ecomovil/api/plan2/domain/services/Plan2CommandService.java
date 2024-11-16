@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface Plan2CommandService {
     Optional<Plan2> handle(CreatePlan2Command command);
+
+    void deletePlan2ById(Long id);
 }

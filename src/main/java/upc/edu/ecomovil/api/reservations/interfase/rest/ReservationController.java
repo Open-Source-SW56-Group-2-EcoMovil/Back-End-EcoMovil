@@ -106,6 +106,14 @@ public class ReservationController {
         return ResponseEntity.ok(reservationResource);
     }
 
+    @DeleteMapping("/{reservationId}")
+    public ResponseEntity<Void> deleteReservation(@PathVariable Long reservationId){
+        var deleteCommand = new UpdateReservationStatusCommand(reservationId, "DELETED");
+        var reservation = reservationCommandService.handle(deleteCommand);
+        if (reservation.isEmpty()) return ResponseEntity.notFound().build();
+        return ResponseEntity.noContent().build();
+    }
+
 }
 
 

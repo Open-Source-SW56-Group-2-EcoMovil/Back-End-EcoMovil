@@ -23,4 +23,9 @@ public class Plan2CommandServiceImpl implements Plan2CommandService {
         return Optional.of(plan2);
     }
 
+    @Override
+    public void deletePlan2ById(Long id) {
+        plan2Repository.deleteById(id);
+    }
+
 }
