@@ -2,6 +2,7 @@ package upc.edu.ecomovil.api.forum.domain.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import upc.edu.ecomovil.api.user.domain.model.aggregates.Profile;
 
 @Data
 @Entity
@@ -17,6 +18,7 @@ public class Post {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String author;
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 }
