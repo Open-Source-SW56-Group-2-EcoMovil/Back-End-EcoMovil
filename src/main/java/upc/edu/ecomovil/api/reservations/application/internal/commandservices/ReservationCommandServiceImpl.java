@@ -1,10 +1,12 @@
 package upc.edu.ecomovil.api.reservations.application.internal.commandservices;
 
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import upc.edu.ecomovil.api.reservations.application.internal.outboundservices.acl.ExternalProfileService;
 import upc.edu.ecomovil.api.reservations.application.internal.outboundservices.acl.ExternalVehicleService;
 import upc.edu.ecomovil.api.reservations.domain.model.aggregates.Reservation;
 import upc.edu.ecomovil.api.reservations.domain.model.commands.CreateReservationCommand;
+import upc.edu.ecomovil.api.reservations.domain.model.commands.UpdateReservationStatusCommand;
 import upc.edu.ecomovil.api.reservations.domain.services.ReservationCommandService;
 import upc.edu.ecomovil.api.reservations.infrastructure.persistence.jpa.repositories.ReservationRepository;
 
@@ -37,6 +39,24 @@ public class ReservationCommandServiceImpl implements ReservationCommandService 
         var reservation = new Reservation(command, vehicle.get(), profile.get());
         reservationRepository.save(reservation);
         return Optional.of(reservation);
+    }
+
+    @Transactional
+    @Override
+    public Optional<Reservation> handle(UpdateReservationStatusCommand command) {
+        // Primero, buscar la reserva por ID
+        var reservation = reservationRepository.findById(command.reservationId());
+        if (reservation.isEmpty()) {
+            throw new IllegalArgumentException("La reserva con el ID especificado no existe");
+        }
+
+        // Actualizar el estado de la reserva
+        reservation.get().setStatus(command.status());
+
+        // Guardar los cambios en el repositorio
+        reservationRepository.save(reservation.get());
+
+        return Optional.of(reservation.get());
     }
 }
 /**

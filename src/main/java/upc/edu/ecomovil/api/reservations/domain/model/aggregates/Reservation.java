@@ -54,6 +54,7 @@ public class Reservation extends AuditableAbstractAggregateRoot<Reservation> {
     }
 
 
-
-
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upc.edu.ecomovil.api.reservations.domain.model.commands.UpdateReservationStatusCommand;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsByProfileIdQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetReservationByIdQuery;
@@ -74,6 +75,35 @@ public class ReservationController {
         if (reservations.isEmpty()) return ResponseEntity.notFound().build();
         var reservationResources = reservations.stream().map(ReservationResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(reservationResources);
+    }
+
+    @Operation(
+            summary = "Update the status of a Reservation",
+            description = "Updates the status of a Reservation with the provided data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reservation updated"),
+            @ApiResponse(responseCode = "400", description = "Bad request"),
+            @ApiResponse(responseCode = "404", description = "Reservation not found")
+    })
+    @PutMapping("/{reservationId}/status")
+    public ResponseEntity<ReservationResource> updateReservationStatus(@PathVariable Long reservationId, @RequestBody String status) {
+        var updateCommand = new UpdateReservationStatusCommand(reservationId, status);
+        var reservation = reservationCommandService.handle(updateCommand);
+        if (reservation.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var reservationResource = ReservationResourceFromEntityAssembler.toResourceFromEntity(reservation.get());
+        return ResponseEntity.ok(reservationResource);
+    }
+
+  //update reservation
+    @PutMapping("/{reservationId}")
+    public ResponseEntity<ReservationResource> updateReservation(@PathVariable Long reservationId, @RequestBody CreateReservationResource resource){
+        var updateCommand = new UpdateReservationStatusCommand(reservationId, resource.status());
+        var reservation = reservationCommandService.handle(updateCommand);
+        if (reservation.isEmpty()) return ResponseEntity.notFound().build();
+        var reservationResource = ReservationResourceFromEntityAssembler.toResourceFromEntity(reservation.get());
+        return ResponseEntity.ok(reservationResource);
     }
 
 }
