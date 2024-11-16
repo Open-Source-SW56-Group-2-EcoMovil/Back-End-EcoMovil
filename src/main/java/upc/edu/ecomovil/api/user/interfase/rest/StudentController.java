@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import upc.edu.ecomovil.api.user.domain.model.queries.Student.GetAllStudentQuery;
+import upc.edu.ecomovil.api.user.domain.model.queries.Student.GetStudentByIdQuery;
 import upc.edu.ecomovil.api.user.domain.services.StudentCommandService;
 import upc.edu.ecomovil.api.user.domain.services.StudentQueryService;
 import upc.edu.ecomovil.api.user.interfase.rest.resources.student.CreateStudentResource;
@@ -63,5 +64,14 @@ public class StudentController {
         var students = studentQueryService.handle(getAllProfilesQuery);
         var studentResources = students.stream().map(StudentResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(studentResources);
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<StudentResource> getProfileById(@PathVariable Long id) {
+        var getProfileByIdQuery = new GetStudentByIdQuery(id);
+        var student = studentQueryService.handle(getProfileByIdQuery);
+        if (student.isEmpty()) return ResponseEntity.notFound().build();
+        var studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student.get());
+        return ResponseEntity.ok(studentResource);
     }
 }

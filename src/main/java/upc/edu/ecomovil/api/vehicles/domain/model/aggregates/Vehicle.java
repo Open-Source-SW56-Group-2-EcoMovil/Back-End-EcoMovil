@@ -2,8 +2,12 @@ package upc.edu.ecomovil.api.vehicles.domain.model.aggregates;
 
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import upc.edu.ecomovil.api.plan2.domain.model.aggregates.Plan2;
 import upc.edu.ecomovil.api.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import upc.edu.ecomovil.api.user.domain.model.entities.Student;
 import upc.edu.ecomovil.api.vehicles.domain.model.commands.CreateVehicleCommand;
 import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Details;
 import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Prices;
@@ -11,6 +15,11 @@ import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Review;
 
 @Entity
 public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
+
+    //relacion con student
+    @ManyToOne
+    @JoinColumn(name = "student_id")  // Relaciona con la tabla 'Plan'
+    private Student student;
 
     @Embedded
     private Details details;
@@ -45,7 +54,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.lng = lng;
     }
 
-    public Vehicle(CreateVehicleCommand command){
+    public Vehicle(CreateVehicleCommand command, Student student) {
         this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
         this.prices = new Prices(command.pricerent(), command.pricesell());
@@ -53,6 +62,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.ImageUrl = command.imageUrl();
         this.lat = command.lat();
         this.lng = command.lng();
+        this.student = student;
     }
 
     public Vehicle(){}
@@ -109,6 +119,11 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     public Double getPriceSell(){
         return prices.getPriceSell();
     }
+
+    public Student getStudent() {
+        return student;
+    }
+
 
 
 }
