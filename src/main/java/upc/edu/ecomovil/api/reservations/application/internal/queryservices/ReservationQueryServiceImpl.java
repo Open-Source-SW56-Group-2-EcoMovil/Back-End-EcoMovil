@@ -2,6 +2,7 @@ package upc.edu.ecomovil.api.reservations.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
 import upc.edu.ecomovil.api.reservations.domain.model.aggregates.Reservation;
+import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsByProfileIdQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetReservationByIdQuery;
 import upc.edu.ecomovil.api.reservations.domain.services.ReservationQueryService;
@@ -26,6 +27,11 @@ public class ReservationQueryServiceImpl implements ReservationQueryService {
     @Override
     public List<Reservation> handle(GetAllReservationsQuery query) {
         return reservationRepository.findAll();
+    }
+
+    @Override
+    public List<Reservation> handle(GetAllReservationsByProfileIdQuery query) {
+        return reservationRepository.findAllByProfileId(query.profileId());
     }
 }
 

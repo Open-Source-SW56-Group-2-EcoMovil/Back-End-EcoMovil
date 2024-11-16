@@ -28,6 +28,7 @@ public class Reservation extends AuditableAbstractAggregateRoot<Reservation> {
  }
 
  public Reservation(CreateReservationCommand command, Vehicle vehicle, Profile profile) {
+    this.status = command.status();
     this.vehicle = vehicle;
     this.profile = profile;
  }

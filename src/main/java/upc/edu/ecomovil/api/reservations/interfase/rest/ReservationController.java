@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsByProfileIdQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetAllReservationsQuery;
 import upc.edu.ecomovil.api.reservations.domain.model.queries.GetReservationByIdQuery;
 import upc.edu.ecomovil.api.reservations.domain.services.ReservationCommandService;
@@ -64,6 +65,15 @@ public class ReservationController {
         if (reservation.isEmpty()) return ResponseEntity.notFound().build();
         var reservationResource = ReservationResourceFromEntityAssembler.toResourceFromEntity(reservation.get());
         return ResponseEntity.ok(reservationResource);
+    }
+
+    @GetMapping("/profile/{profileId}")
+    public ResponseEntity<List<ReservationResource>> getAllReservationsByProfileId(@PathVariable Long profileId){
+        var getAllReservationsByProfileIdQuery = new GetAllReservationsByProfileIdQuery(profileId);
+        var reservations = reservationQueryService.handle(getAllReservationsByProfileIdQuery);
+        if (reservations.isEmpty()) return ResponseEntity.notFound().build();
+        var reservationResources = reservations.stream().map(ReservationResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
+        return ResponseEntity.ok(reservationResources);
     }
 
 }

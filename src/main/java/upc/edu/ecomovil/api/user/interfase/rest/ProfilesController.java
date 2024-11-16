@@ -66,4 +66,13 @@ public class ProfilesController {
         var profileResources = profiles.stream().map(ProfileResourceFromEntityAssembler::toResourceFromEntity).collect(Collectors.toList());
         return ResponseEntity.ok(profileResources);
     }
+
+    @PutMapping("/id/{profileId}")
+    public ResponseEntity<ProfileResource> updateProfile(@PathVariable Long profileId, @RequestBody CreateProfileResource resource) {
+        var updateProfileCommand = CreateProfileCommandFromResourceAssembler.toCommandFromResource(resource);
+        var profile = profileCommandService.handle(updateProfileCommand);
+        if (profile.isEmpty()) return ResponseEntity.badRequest().build();
+        var profileResource = ProfileResourceFromEntityAssembler.toResourceFromEntity(profile.get());
+        return ResponseEntity.ok(profileResource);
+    }
 }

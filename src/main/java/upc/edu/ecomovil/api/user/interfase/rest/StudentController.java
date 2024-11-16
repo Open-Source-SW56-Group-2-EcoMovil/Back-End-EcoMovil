@@ -74,4 +74,13 @@ public class StudentController {
         var studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student.get());
         return ResponseEntity.ok(studentResource);
     }
+
+    @PutMapping("/id/{id}")
+    public ResponseEntity<StudentResource> updateProfile(@PathVariable Long id, @RequestBody CreateStudentResource resource) {
+        var createStudentCommand = CreateStudentCommandFromResourceAssembler.toCommandFromResource(resource);
+        var student = studentCommandService.handle(createStudentCommand);
+        if (student.isEmpty()) return ResponseEntity.badRequest().build();
+        var studentResource = StudentResourceFromEntityAssembler.toResourceFromEntity(student.get());
+        return ResponseEntity.ok(studentResource);
+    }
 }
