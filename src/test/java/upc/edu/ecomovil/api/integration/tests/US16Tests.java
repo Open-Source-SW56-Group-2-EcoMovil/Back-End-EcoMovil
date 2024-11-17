@@ -2,126 +2,72 @@ package upc.edu.ecomovil.api.integration.tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.ResponseEntity;
 import upc.edu.ecomovil.api.acceptance.tests.steps.US16Steps;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class US16Tests {
 
-    private US16Steps us16Steps;
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private String baseUrl;
 
     @BeforeEach
     public void setUp() {
-        us16Steps = new US16Steps();
+        baseUrl = "http://localhost:" + port;
     }
 
     @Test
-    public void testTheUserIsOnTheRegistrationPage() {
-        us16Steps.the_user_is_on_the_registration_page();
-        // Add assertions to verify the expected behavior
+    public void testSuccessfulRegistration() {
+        String url = baseUrl + "/api/auth/register";
+        String requestBody = "{\"fullName\":\"María Pérez\",\"email\":\"maria@example.com\",\"password\":\"password123\",\"confirmPassword\":\"password123\"}";
+
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestBody, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(201);
+        assertThat(response.getBody()).contains("Registration successful");
     }
 
     @Test
-    public void testEntersHisFullName() {
-        String fullName = "María Pérez";
-        us16Steps.enters_his_full_name(fullName);
-        // Add assertions to verify the expected behavior
+    public void testFailedRegistrationByExistingEmail() {
+        String url = baseUrl + "/api/auth/register";
+        String requestBody = "{\"fullName\":\"María Pérez\",\"email\":\"maria@example.com\",\"password\":\"password123\",\"confirmPassword\":\"password123\"}";
+
+        // First registration attempt
+        restTemplate.postForEntity(url, requestBody, String.class);
+
+        // Second registration attempt with the same email
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestBody, String.class);
+
+        assertThat(response.getStatusCodeValue()).isEqualTo(409);
+        assertThat(response.getBody()).contains("Email is already registered");
     }
 
     @Test
-    public void testEntersAValidEmail() {
-        String email = "maria@example.com";
-        us16Steps.enters_a_valid_email(email);
-        // Add assertions to verify the expected behavior
-    }
+    public void testPasswordValidation() {
+        String url = baseUrl + "/api/auth/register";
+        String requestBody = "{\"fullName\":\"María Pérez\",\"email\":\"maria@example.com\",\"password\":\"123\",\"confirmPassword\":\"123\"}";
 
-    @Test
-    public void testCreatesAValidPassword() {
-        String password = "password123";
-        us16Steps.creates_a_valid_password(password);
-        // Add assertions to verify the expected behavior
-    }
+        ResponseEntity<String> response = restTemplate.postForEntity(url, requestBody, String.class);
 
-    @Test
-    public void testConfirmsThePassword() {
-        String confirmPassword = "password123";
-        us16Steps.confirms_the_password(confirmPassword);
-        // Add assertions to verify the expected behavior
-    }
+        assertThat(response.getStatusCodeValue()).isEqualTo(400);
+        assertThat(response.getBody()).contains("Password must be at least 6 characters");
 
-    @Test
-    public void testAcceptsTheTermsAndConditions() {
-        us16Steps.accepts_the_terms_and_conditions();
-        // Add assertions to verify the expected behavior
-    }
+        requestBody = "{\"fullName\":\"María Pérez\",\"email\":\"maria@example.com\",\"password\":\"password123\",\"confirmPassword\":\"password456\"}";
 
-    @Test
-    public void testPressesTheButton() {
-        String button = "Register";
-        us16Steps.presses_the_button(button);
-        // Add assertions to verify the expected behavior
-    }
+        response = restTemplate.postForEntity(url, requestBody, String.class);
 
-    @Test
-    public void testTheSystemSendsAPostRequestToWithTheUserData() {
-        String endpoint = "/api/auth/register";
-        us16Steps.the_system_sends_a_post_request_to_with_the_user_data(endpoint);
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testTheServerRespondsWithACodeAndAMessage() {
-        int statusCode = 201;
-        String message = "Registration successful";
-        us16Steps.the_server_responds_with_a_code_and_a_message(statusCode, message);
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testTheConfirmationMessageIsDisplayedOnTheRegistrationPage() {
-        us16Steps.the_confirmation_message_is_displayed_on_the_registration_page();
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testEntersAnExistingEmail() {
-        String email = "maria@example.com";
-        us16Steps.enters_an_existing_email(email);
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testFillsOutTheOtherFieldsCorrectly() {
-        us16Steps.fills_out_the_other_fields_correctly();
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testTheErrorMessageIsDisplayedOnTheRegistrationPage() {
-        us16Steps.the_error_message_is_displayed_on_the_registration_page();
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testHeEntersAPassword() {
-        String password = "123";
-        us16Steps.he_enters_a_password(password);
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testEntersAPasswordConfirmation() {
-        String confirmPassword = "password456";
-        us16Steps.enters_a_password_confirmation(confirmPassword);
-        // Add assertions to verify the expected behavior
-    }
-
-    @Test
-    public void testTheSystemDisplaysAnErrorMessage() {
-        String errorMessage = "Password must be at least 6 characters";
-        us16Steps.the_system_displays_an_error_message(errorMessage);
-        // Add assertions to verify the expected behavior
+        assertThat(response.getStatusCodeValue()).isEqualTo(400);
+        assertThat(response.getBody()).contains("Passwords do not match");
     }
 }
