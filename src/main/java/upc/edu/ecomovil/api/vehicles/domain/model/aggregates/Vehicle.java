@@ -107,7 +107,6 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         return details.getYear();
     }
 
-
     public Integer getReview(){
         return review.getReview();
     }
@@ -123,7 +122,4 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     public Student getStudent() {
         return student;
     }
-
-
-
 }

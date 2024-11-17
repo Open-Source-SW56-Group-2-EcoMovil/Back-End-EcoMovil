@@ -2,11 +2,31 @@ package upc.edu.ecomovil.api.unit.tests;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.security.core.parameters.P;
 import upc.edu.ecomovil.api.acceptance.tests.steps.US16Steps;
+import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
+import upc.edu.ecomovil.api.iam.domain.model.entities.Role;
+import upc.edu.ecomovil.api.iam.domain.model.valueobjects.Roles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class US16Tests {
+
+    private User user;
+    private Role role;
+
+    @BeforeEach
+    public void setUp1() {
+        user = new User("juan", "123abc");
+        role = new Role(Roles.ROLE_USER);
+    }
+
+    @Test
+    public void testAddRole() {
+        user.addRole(role);
+        assertTrue(user.getRoles().contains(role));
+    }
 
     private US16Steps us16Steps;
 
