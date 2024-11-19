@@ -22,13 +22,7 @@ public class VehicleCommandServiceImpl implements VehicleCommandService {
     @Override
     public Optional<Vehicle> handle(CreateVehicleCommand command) {
 
-        var student = externalStudentService.fetchStudentById(command.studentId());
-        if (student.isEmpty()) {
-            throw new IllegalArgumentException("El estudiante con el ID especificado no existe");
-        }
-
-
-        var vehicle = new Vehicle(command, student.get());
+        var vehicle = new Vehicle(command);
         vehicleRepository.save(vehicle);
         return Optional.of(vehicle);
     }

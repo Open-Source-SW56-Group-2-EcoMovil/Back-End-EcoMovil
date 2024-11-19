@@ -59,7 +59,7 @@ public class VehicleController {
         return ResponseEntity.ok(vehicleResources);
     }
 
-    @GetMapping("/id/{vehicleId}")
+    @GetMapping("/{vehicleId}")
     public ResponseEntity<VehicleResource> getVehicleById(@PathVariable Long vehicleId){
         var getVehicleByIdQuery = new GetVehicleByIdQuery(vehicleId);
         var vehicle = vehicleQueryService.handle(getVehicleByIdQuery);

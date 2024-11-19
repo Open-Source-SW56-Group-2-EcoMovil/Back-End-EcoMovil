@@ -16,11 +16,6 @@ import upc.edu.ecomovil.api.vehicles.domain.model.valueobjects.Review;
 @Entity
 public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
 
-    //relacion con student
-    @Getter
-    @ManyToOne
-    @JoinColumn(name = "student_id")  // Relaciona con la tabla 'Plan'
-    private Student student;
 
     @Embedded
     private Details details;
@@ -57,7 +52,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.description = description;
     }
 
-    public Vehicle(CreateVehicleCommand command, Student student) {
+    public Vehicle(CreateVehicleCommand command) {
         this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
         this.prices = new Prices(command.pricerent(), command.pricesell());
@@ -66,7 +61,6 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.lat = command.lat();
         this.lng = command.lng();
         this.description = command.description();
-        this.student = student;
     }
 
     public Vehicle(){}

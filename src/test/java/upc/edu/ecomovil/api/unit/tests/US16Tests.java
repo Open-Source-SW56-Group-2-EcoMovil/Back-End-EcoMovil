@@ -18,7 +18,7 @@ public class US16Tests {
 
     @BeforeEach
     public void setUp1() {
-        user = new User("juan", "123abc");
+        user = new User("juan", "123abc", "juan@gmail.com");
         role = new Role(Roles.ROLE_USER);
     }
 
