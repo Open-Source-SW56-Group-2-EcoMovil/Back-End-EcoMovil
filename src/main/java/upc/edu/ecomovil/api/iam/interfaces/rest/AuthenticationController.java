@@ -4,11 +4,9 @@ import upc.edu.ecomovil.api.iam.domain.services.UserCommandService;
 import upc.edu.ecomovil.api.iam.interfaces.rest.resources.AuthenticatedUserResource;
 import upc.edu.ecomovil.api.iam.interfaces.rest.resources.SignInResource;
 import upc.edu.ecomovil.api.iam.interfaces.rest.resources.SignUpResource;
-import upc.edu.ecomovil.api.iam.interfaces.rest.resources.UserResource;
 import upc.edu.ecomovil.api.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
 import upc.edu.ecomovil.api.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
 import upc.edu.ecomovil.api.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
-import upc.edu.ecomovil.api.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -58,18 +56,30 @@ public class AuthenticationController {
     /**
      * Handles the sign-up request.
      * @param signUpResource the sign-up request body.
-     * @return the created user resource.
+     * @return the authenticated user resource with token.
      */
     @PostMapping("/sign-up")
-    public ResponseEntity<UserResource> signUp(@RequestBody SignUpResource signUpResource) {
+    public ResponseEntity<AuthenticatedUserResource> signUp(@RequestBody SignUpResource signUpResource) {
         var signUpCommand = SignUpCommandFromResourceAssembler.toCommandFromResource(signUpResource);
         var user = userCommandService.handle(signUpCommand);
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
-        return new ResponseEntity<>(userResource, HttpStatus.CREATED);
-
+        
+        // Automatically sign in the user after successful registration
+        var signInCommand = SignInCommandFromResourceAssembler.toCommandFromResource(
+            new SignInResource(signUpResource.username(), signUpResource.password())
+        );
+        var authenticatedUser = userCommandService.handle(signInCommand);
+        if (authenticatedUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        
+        var authenticatedUserResource = AuthenticatedUserResourceFromEntityAssembler.toResourceFromEntity(
+            authenticatedUser.get().getLeft(), 
+            authenticatedUser.get().getRight()
+        );
+        return new ResponseEntity<>(authenticatedUserResource, HttpStatus.CREATED);
     }
 
 

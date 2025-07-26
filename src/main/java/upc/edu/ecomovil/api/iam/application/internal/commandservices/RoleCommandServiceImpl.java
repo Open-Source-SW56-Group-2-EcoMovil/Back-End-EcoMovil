@@ -6,6 +6,7 @@ import upc.edu.ecomovil.api.iam.domain.model.valueobjects.Roles;
 import upc.edu.ecomovil.api.iam.domain.services.RoleCommandService;
 import upc.edu.ecomovil.api.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 
@@ -27,11 +28,12 @@ public class RoleCommandServiceImpl implements RoleCommandService {
      * @see SeedRolesCommand
      */
     @Override
+    @Transactional
     public void handle(SeedRolesCommand command) {
         Arrays.stream(Roles.values()).forEach(role -> {
             if(!roleRepository.existsByName(role)) {
                 roleRepository.save(new Role(Roles.valueOf(role.name())));
             }
-        } );
+        });
     }
 }

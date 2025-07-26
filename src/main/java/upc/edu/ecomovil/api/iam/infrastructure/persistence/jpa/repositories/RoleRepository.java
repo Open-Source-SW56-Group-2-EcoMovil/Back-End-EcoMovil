@@ -3,6 +3,8 @@ package upc.edu.ecomovil.api.iam.infrastructure.persistence.jpa.repositories;
 import upc.edu.ecomovil.api.iam.domain.model.entities.Role;
 import upc.edu.ecomovil.api.iam.domain.model.valueobjects.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -13,6 +15,14 @@ import java.util.Optional;
  */
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
+
+    /**
+     * This method is responsible for finding the role by name using LIMIT to ensure uniqueness.
+     * @param name The role name.
+     * @return The role object.
+     */
+    @Query(value = "SELECT * FROM roles WHERE name = :name LIMIT 1", nativeQuery = true)
+    Optional<Role> findFirstByName(@Param("name") String name);
 
     /**
      * This method is responsible for finding the role by name.
