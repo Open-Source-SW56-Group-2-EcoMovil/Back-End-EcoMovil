@@ -7,7 +7,7 @@
 package upc.edu.ecomovil.api.iam.domain.model.valueobjects;
 
 public enum Roles {
-    ROLE_USER,
-    ROLE_ADMIN,
-    ROLE_INSTRUCTOR
+    ADMIN,
+    ROLE_OWNER,
+    ROLE_ACQUIRER
 }
