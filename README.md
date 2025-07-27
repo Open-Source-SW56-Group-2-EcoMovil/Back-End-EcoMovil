@@ -19,7 +19,7 @@ API REST para la plataforma de movilidad sostenible EcoMovil, desarrollada con S
 ## ✨ Características
 
 - 🔐 **Autenticación JWT** con Spring Security
-- 👥 **Sistema de usuarios y roles** (USER, ADMIN)
+- 👥 **Sistema de usuarios y roles** (ADMIN, ROLE_OWNER, ROLE_ACQUIRER)
 - 🚗 **Gestión de vehículos** ecoamigables
 - 📅 **Sistema de reservas** de vehículos
 - 👨‍🎓 **Gestión de estudiantes** y planes
@@ -27,6 +27,7 @@ API REST para la plataforma de movilidad sostenible EcoMovil, desarrollada con S
 - 📖 **Documentación automática** con Swagger/OpenAPI
 - 🔄 **Hot reload** para desarrollo
 - 🏗️ **Arquitectura DDD** (Domain Driven Design) con CQRS
+- 🔒 **Variables de entorno** para configuración segura
 
 ## 🛠️ Tecnologías
 

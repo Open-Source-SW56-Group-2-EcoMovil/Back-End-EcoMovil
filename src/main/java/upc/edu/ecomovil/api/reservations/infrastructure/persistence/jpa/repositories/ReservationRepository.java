@@ -8,8 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
-    //Aqui incluyo aquellos metodos que no estan en el JpaRepository
-    public List<Reservation> findAllByProfileId(Long profileId);
-
+    List<Reservation> findAllByProfileId(Long profileId);
 }
 

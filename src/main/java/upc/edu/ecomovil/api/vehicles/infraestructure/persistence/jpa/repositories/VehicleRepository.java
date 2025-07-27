@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
-    //Aqui incluyo aquellos metodos que no estan en el JpaRepository
     List<Vehicle> findAllByDetails_Type(String type);
 }

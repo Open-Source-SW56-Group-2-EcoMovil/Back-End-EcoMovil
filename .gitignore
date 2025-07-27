@@ -11,6 +11,14 @@ target/
 .env.production
 *.env
 
+# Archivos temporales de desarrollo
+*-temp.sql
+*_temp.sql
+clean*.sql
+setup*.sql
+test*.json
+*-test.json
+
 ### STS ###
 .apt_generated
 .classpath
@@ -38,3 +46,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Logs
+*.log
+logs/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
