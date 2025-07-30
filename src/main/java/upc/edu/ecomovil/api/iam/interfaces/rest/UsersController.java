@@ -8,6 +8,7 @@ import upc.edu.ecomovil.api.iam.interfaces.rest.transform.UserResourceFromEntity
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ public class UsersController {
      * @return a list of user resources
      * @see UserResource
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserResource>> getAllUsers() {
         var getAllUsersQuery = new GetAllUsersQuery();
@@ -51,6 +53,7 @@ public class UsersController {
      * @throws RuntimeException if the user is not found
      * @see UserResource
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/{userId}")
     public ResponseEntity<UserResource> getUserById(@PathVariable Long userId) {
         var getUserByIdQuery = new GetUserByIdQuery(userId);

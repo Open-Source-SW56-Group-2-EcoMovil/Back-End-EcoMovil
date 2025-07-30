@@ -1,6 +1,5 @@
 package upc.edu.ecomovil.api.user.domain.model.aggregates;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import upc.edu.ecomovil.api.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;

@@ -9,6 +9,7 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import upc.edu.ecomovil.api.vehicles.domain.model.queries.GetAllVehiclesByTypeQuery;
 import upc.edu.ecomovil.api.vehicles.domain.model.queries.GetAllVehiclesQuery;
@@ -42,6 +43,7 @@ public class VehicleController {
             @ApiResponse(responseCode = "201", description = "Vehicle created"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
+    @PreAuthorize("hasRole('ROLE_OWNER')")
     @PostMapping
     public ResponseEntity<VehicleResource> createVehicle(@RequestBody CreateVehicleResource resource){
         var createVehicleCommand = CreateVehicleCommandFromResourceAssembler.toCommandFromResource(resource);
