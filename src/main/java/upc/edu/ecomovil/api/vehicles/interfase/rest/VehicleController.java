@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import upc.edu.ecomovil.api.vehicles.domain.model.commands.DeleteVehicleCommand;
 import upc.edu.ecomovil.api.vehicles.domain.model.queries.GetAllVehiclesByTypeQuery;
 import upc.edu.ecomovil.api.vehicles.domain.model.queries.GetAllVehiclesQuery;
 import upc.edu.ecomovil.api.vehicles.domain.model.queries.GetVehicleByIdQuery;
@@ -20,6 +21,7 @@ import upc.edu.ecomovil.api.vehicles.interfase.rest.resources.CreateVehicleResou
 import upc.edu.ecomovil.api.vehicles.interfase.rest.resources.VehicleResource;
 import upc.edu.ecomovil.api.vehicles.interfase.rest.transform.CreateVehicleCommandFromResourceAssembler;
 import upc.edu.ecomovil.api.vehicles.interfase.rest.transform.VehicleResourceFromEntityAssembler;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,6 +79,27 @@ public class VehicleController {
         if (vehicles.isEmpty()) return ResponseEntity.notFound().build();
         var vehicleResources = vehicles.stream().map(VehicleResourceFromEntityAssembler::toResourceFromEntity).toList();
         return ResponseEntity.ok(vehicleResources);
+    }
+
+    @Operation(
+        summary = "Delete a vehicle",
+        description = "Deletes a vehicle by its ID. Only admin or vehicle owners can delete vehicles.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Vehicle deleted successfully"),
+        @ApiResponse(responseCode = "404", description = "Vehicle not found"),
+        @ApiResponse(responseCode = "403", description = "Access denied - Only admin or owners can delete vehicles"),
+        @ApiResponse(responseCode = "401", description = "Unauthorized - Authentication required")
+    })
+    @PreAuthorize("hasRole('ADMIN') or hasRole('ROLE_OWNER')")
+    @DeleteMapping("/{vehicleId}")
+    public ResponseEntity<Void> deleteVehicle(@PathVariable Long vehicleId) {
+        var deleteVehicleCommand = new DeleteVehicleCommand(vehicleId);
+        try {
+            vehicleCommandService.handle(deleteVehicleCommand);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 

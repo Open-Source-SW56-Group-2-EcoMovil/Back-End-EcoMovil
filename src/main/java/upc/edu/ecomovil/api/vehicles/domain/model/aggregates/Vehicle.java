@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import upc.edu.ecomovil.api.iam.domain.model.aggregates.User;
 import upc.edu.ecomovil.api.plan2.domain.model.aggregates.Plan2;
 import upc.edu.ecomovil.api.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
 import upc.edu.ecomovil.api.user.domain.model.entities.Student;
@@ -41,6 +42,10 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
     @Getter
     private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
     public Vehicle(String type, String name, Integer year, Integer review, Double pricerent, Double pricesell, Boolean isAvailable, String imageUrl, Float lat, Float lng, String description) {
         this.details = new Details(type, name, year);
         this.review = new Review(review);
@@ -52,7 +57,9 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.description = description;
     }
 
-    public Vehicle(CreateVehicleCommand command) {
+    public User getOwner() { return owner; }
+
+    public Vehicle(CreateVehicleCommand command, User owner) {
         this.details = new Details(command.type(), command.name(), command.year());
         this.review = new Review(command.review());
         this.prices = new Prices(command.pricerent(), command.pricesell());
@@ -61,6 +68,7 @@ public class Vehicle extends AuditableAbstractAggregateRoot<Vehicle> {
         this.lat = command.lat();
         this.lng = command.lng();
         this.description = command.description();
+        this.owner = owner;
     }
 
     public Vehicle(){}
